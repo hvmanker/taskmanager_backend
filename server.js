@@ -6,9 +6,24 @@ const connectDB = require("./config/dbconnect");
 require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = ['https://codedata-frontend.onrender.com'];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Enable credentials
+};
+
+
 
 connectDB();
-app.use(cors());
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/", (req, res) => {
